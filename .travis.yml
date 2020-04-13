@@ -31,7 +31,7 @@ jobs:
                   sources: ['ubuntu-toolchain-r-test']
                   packages: ['g++-7', 'cmake', 'ninja-build']
           before_install:
-              - sudo pip install requests==2.5.3
+              - pip install -U httplib2
               - pip install --user cpp-coveralls
           after_success:
               - >
