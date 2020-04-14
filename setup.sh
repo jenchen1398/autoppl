@@ -3,12 +3,17 @@
 gbenchpath="lib/benchmark"
 gtestpath="$gbenchpath/googletest"
 
-# Update submodule if needed
-git submodule update --recursive --remote
+# setup google benchmark
+echo -n "Setting up google benchmark... "
+git submodule update --init
+echo "done"
 
-# Setup google benchmark and googletest
-if [ -d "$gtestpath" ]; then
-    cd $gtestpath && git pull && cd - 2&>1 /dev/null
-else
+# setup googletest
+echo -n "Setting up googletest... "
+if [ ! -d "$gtestpath" ]; then
     git clone https://github.com/google/googletest.git $gtestpath
+    cd $gtestpath
+    git checkout release-1.10.0
+    cd -
 fi
+echo "done"
