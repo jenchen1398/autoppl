@@ -9,6 +9,7 @@
 #include <autoppl/expression/distribution/uniform.hpp>
 #include <autoppl/expression/distribution/normal.hpp>
 #include <autoppl/expression/distribution/bernoulli.hpp>
+#include <autoppl/expression/distribution/discrete.hpp>
 
 namespace ppl {
 
@@ -154,6 +155,22 @@ inline constexpr auto bernoulli(ProbType&& p_expr)
     using p_t = details::convert_to_param_t<ProbType>;
     p_t wrap_p_expr = std::forward<ProbType>(p_expr);
     return expr::Bernoulli(wrap_p_expr);
+}
+
+/*
+ * Builds a Discrete expression only when the parameter
+ * is a valid discrete distribution parameter type.
+ * See var_expr.hpp for more information.
+ */
+template <class ProbType
+        , class = std::enable_if_t<
+            details::is_valid_dist_param_v<ProbType>
+        > >
+inline constexpr auto discrete(ProbType&& p_expr)
+{
+    using p_t = details::convert_to_param_t<ProbType>;
+    p_t wrap_p_expr = std::forward<ProbType>(p_expr);
+    return expr::Discrete(wrap_p_expr);
 }
 
 ////////////////////////////////////////////////////////
