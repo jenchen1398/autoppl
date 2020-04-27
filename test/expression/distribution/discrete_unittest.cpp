@@ -1,4 +1,5 @@
 #include <autoppl/expression/distribution/discrete.hpp>
+#include <autoppl/expr_builder.hpp>
 #include <testutil/mock_types.hpp>
 #include <testutil/sample_tools.hpp>
 #include <cmath>
@@ -15,10 +16,11 @@ protected:
 
     std::vector<MockVarExpr> weights_norm {MockVarExpr{0.1}, MockVarExpr{0.2}, MockVarExpr{0.3}, MockVarExpr{0.4}}; 
     std::vector<MockVarExpr> weights {MockVarExpr{1}, MockVarExpr{2}, MockVarExpr{3}, MockVarExpr{4}}; 
-   
-    Discrete<MockVarExpr> dist1 =  {MockVarExpr{1}, MockVarExpr{2}, MockVarExpr{3}, MockVarExpr{4}}; 
+    
+    Discrete<MockVarExpr> dist1 = Discrete(weights); 
     Discrete<MockVarExpr> dist2;
     Discrete<MockVarExpr> dist3 = Discrete(weights.begin(), weights.end());
+    Discrete<MockVarExpr> dist4 = ppl::discrete({MockVarExpr{1}, MockVarExpr{2}, MockVarExpr{3}, MockVarExpr{4}}); 
 };
 
 TEST_F(discrete_dist_fixture, ctor){
@@ -95,6 +97,21 @@ TEST_F(discrete_dist_fixture, Discrete_sampling_iter) {
 TEST_F(discrete_dist_fixture, Discrete_max_min) {
     EXPECT_EQ(dist1.min(), 0);
     EXPECT_EQ(dist1.max(), weights_norm.size() - 1);
+}
+
+TEST_F(discrete_dist_fixture, discrete_wrapper) {
+    EXPECT_DOUBLE_EQ(dist4.weights(0), weights_norm[0].get_value());
+    EXPECT_DOUBLE_EQ(dist4.weights(1), weights_norm[1].get_value());
+    EXPECT_DOUBLE_EQ(dist4.weights(2), weights_norm[2].get_value()); 
+    EXPECT_DOUBLE_EQ(dist4.weights(3), weights_norm[3].get_value());
+}
+
+int main() {
+    std::vector<MockVarExpr> weights {MockVarExpr{1}, MockVarExpr{2}, MockVarExpr{3}, MockVarExpr{4}}; 
+    
+    auto dist = Discrete(weights); 
+    std::cout << dist.pdf(0) << '\n';
+    return 0;
 }
 } // namespace expr
 } // namespace ppl

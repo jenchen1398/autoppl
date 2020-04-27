@@ -13,8 +13,9 @@ struct Constant : util::VarExpr<Constant<ValueType>>
     {}
     explicit operator value_t() const { return get_value(); }
     value_t get_value() const { return c_; }
+    void set_value(value_t value) { c_ = value; }
 
-private:
+   private:
     value_t c_;
 };
 

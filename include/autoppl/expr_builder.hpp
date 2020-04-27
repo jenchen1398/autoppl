@@ -162,14 +162,20 @@ inline constexpr auto bernoulli(ProbType&& p_expr)
  * is a valid discrete distribution parameter type.
  * See var_expr.hpp for more information.
  */
-template <class WeightType
-        , class = std::enable_if_t<
-            details::is_valid_dist_param_v<WeightType>
-        > >
-inline constexpr auto discrete(WeightType&& w_expr)
-{
+// template <template<class> class Container, class WeightType, class = std::enable_if_t<
+//             details::is_valid_dist_param_v<WeightType>
+//         > >
+// inline constexpr auto discrete(Container<WeightType> && w_expr)
+// {
+//     using weight_t = details::convert_to_param_t<WeightType>;
+//     std::vector<weight_t> wrap_w_expr(w_expr.begin(), w_expr.end());
+//     return expr::Discrete(wrap_w_expr);
+// }
+
+template <class WeightType, class = std::enable_if_t<details::is_valid_dist_param_v<WeightType>>>
+inline constexpr auto discrete(std::initializer_list<WeightType>&& w_expr) {
     using weight_t = details::convert_to_param_t<WeightType>;
-    weight_t wrap_w_expr = std::forward<WeightType>(w_expr);
+    std::vector<weight_t> wrap_w_expr(w_expr.begin(), w_expr.end());
     return expr::Discrete(wrap_w_expr);
 }
 

@@ -10,7 +10,7 @@
 namespace ppl {
 namespace expr {
     
-template <typename weight_type>
+template <class weight_type>
 struct Discrete : util::DistExpr<Discrete<weight_type>>
 {
     static_assert(util::assert_is_var_expr_v<weight_type>);
@@ -21,8 +21,8 @@ struct Discrete : util::DistExpr<Discrete<weight_type>>
 
     Discrete() { weights_ = {1}; } 
 
-    Discrete(std::initializer_list<weight_type> weights)
-        : weights_{ weights } 
+    Discrete(std::vector<weight_type> weights)
+        : weights_{ weights }
         { normalize_weights(weights_.begin(), weights_.end()); }
 
     template <class Iter>
@@ -50,7 +50,7 @@ struct Discrete : util::DistExpr<Discrete<weight_type>>
         return std::log(weights(i));
     }
 
-    inline weight_value_t weights(value_t i) const { return static_cast<weight_value_t>(weights_[i]); }
+    inline weight_value_t weights(value_t i) const { return weights_[i].get_value(); }
     weight_value_t min() const { 
         return 0; 
     }
@@ -68,7 +68,9 @@ struct Discrete : util::DistExpr<Discrete<weight_type>>
         assert(std::all_of(begin, end, [](const weight_type& w_var){ return w_var.get_value() > 0; }));
         weight_value_t total = std::accumulate(begin, end, 0.0, 
             [] (int tmp_total, weight_type weight) { return tmp_total + weight.get_value(); });
-        std::for_each(begin, end, [total](weight_type& w_var){w_var.set_value(w_var.get_value() / total); }); 
+        if (total != 1) {
+            std::for_each(begin, end, [total](weight_type& w_var){w_var.set_value(w_var.get_value() / total); }); 
+        }
     }
 };
 
