@@ -40,7 +40,7 @@ using cont_param_t = double;
 /*
  * Discrete distribution expressions can be constructed with this type.
  */
-using disc_param_t = int64_t;
+using disc_param_t = uint64_t;
 
 /*
  * Traits for Distribution Expression classes.

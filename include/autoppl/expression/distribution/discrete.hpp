@@ -4,15 +4,20 @@
 #include <cmath>
 #include <numeric>
 #include <algorithm>
+#include <autoppl/util/var_expr_traits.hpp>
+#include <autoppl/util/dist_expr_traits.hpp>
 
 namespace ppl {
 namespace expr {
 
 // TODO: will most likely not be used as an expression
 template <typename weight_type>
-struct Discrete 
+struct Discrete : util::DistExpr<Discrete<weight_type>>
 {
-    using value_t = uint64_t;
+    static_assert(util::assert_is_var_expr_v<weight_type>);
+
+    using value_t = util::disc_param_t;
+    using weight_value_t = typename util::var_expr_traits<weight_type>::value_t; 
     using dist_value_t = double;
 
     Discrete() { weights_ = {1}; } 
@@ -46,7 +51,7 @@ struct Discrete
         return std::log(weights(i));
     }
 
-    inline dist_value_t weights(value_t i) const { return static_cast<dist_value_t>(weights_[i]); }
+    inline weight_value_t weights(value_t i) const { return static_cast<weight_value_t>(weights_[i]); }
 
    private:
     std::vector<weight_type> weights_;

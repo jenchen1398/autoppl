@@ -1,5 +1,6 @@
 #include <autoppl/expression/distribution/discrete.hpp>
-
+#include <testutil/mock_types.hpp>
+#include <testutil/sample_tools.hpp>
 #include <cmath>
 #include <array>
 
@@ -10,11 +11,30 @@ namespace expr {
 
 struct discrete_dist_fixture : ::testing::Test {
 protected:
-    std::vector<double> weights {0.1, 0.2, 0.3, 0.4};
-    Discrete<double> dist1 =  {1.0, 2.0, 3.0, 4.0};
-    Discrete<double> dist2;
-    Discrete<double> dist3 = Discrete(weights.begin(), weights.end());
+    using value_t = typename MockVarExpr::value_t;
+
+    std::vector<MockVarExpr> weights {MockVarExpr{0.1}, MockVarExpr{0.2}, MockVarExpr{0.3}, MockVarExpr{0.4}}; 
+   
+    Discrete<MockVarExpr> dist1 =  {MockVarExpr{0.1}, MockVarExpr{0.2}, MockVarExpr{0.3}, MockVarExpr{0.4}}; 
+    Discrete<MockVarExpr> dist2;
+    Discrete<MockVarExpr> dist3 = Discrete(weights.begin(), weights.end());
 };
+
+TEST_F(discrete_dist_fixture, ctor){
+    static_assert(util::assert_is_dist_expr_v<Discrete<MockVarExpr>>);
+}
+
+TEST_F(discrete_dist_fixture, discrete_check_params) {
+    EXPECT_DOUBLE_EQ(dist1.weights(0), static_cast<value_t>(weights[0]));
+    EXPECT_DOUBLE_EQ(dist1.weights(1), static_cast<value_t>(weights[1]));
+    EXPECT_DOUBLE_EQ(dist1.weights(2), static_cast<value_t>(weights[2]));
+    EXPECT_DOUBLE_EQ(dist1.weights(3), static_cast<value_t>(weights[3]));
+
+    EXPECT_DOUBLE_EQ(dist3.weights(0), static_cast<value_t>(weights[0]));
+    EXPECT_DOUBLE_EQ(dist3.weights(1), static_cast<value_t>(weights[1]));
+    EXPECT_DOUBLE_EQ(dist3.weights(2), static_cast<value_t>(weights[2]));
+    EXPECT_DOUBLE_EQ(dist3.weights(3), static_cast<value_t>(weights[3]));
+}
 
 TEST_F(discrete_dist_fixture, default_cstor_test){
     EXPECT_DOUBLE_EQ(dist2.weights(0), 1.0);
@@ -22,10 +42,10 @@ TEST_F(discrete_dist_fixture, default_cstor_test){
 }
 
 TEST_F(discrete_dist_fixture, sanity_Discrete_test) {
-    EXPECT_DOUBLE_EQ(dist1.weights(0), weights[0]);
-    EXPECT_DOUBLE_EQ(dist1.weights(1), weights[1]);
-    EXPECT_DOUBLE_EQ(dist1.weights(2), weights[2]);
-    EXPECT_DOUBLE_EQ(dist1.weights(3), weights[3]);
+    EXPECT_EQ(dist1.weights(0), weights[0]);
+    EXPECT_EQ(dist1.weights(1), weights[1]);
+    EXPECT_EQ(dist1.weights(2), weights[2]);
+    EXPECT_EQ(dist1.weights(3), weights[3]);
 }
 
 TEST_F(discrete_dist_fixture, simple_Discrete) {
@@ -47,10 +67,10 @@ TEST_F(discrete_dist_fixture, Discrete_sampling) {
 }
 
 TEST_F(discrete_dist_fixture, sanity_Discrete_iter_test) {
-    EXPECT_DOUBLE_EQ(dist3.weights(0), weights[0]);
-    EXPECT_DOUBLE_EQ(dist3.weights(1), weights[1]);
-    EXPECT_DOUBLE_EQ(dist3.weights(2), weights[2]);
-    EXPECT_DOUBLE_EQ(dist3.weights(3), weights[3]);
+    EXPECT_EQ(dist3.weights(0), weights[0]);
+    EXPECT_EQ(dist3.weights(1), weights[1]);
+    EXPECT_EQ(dist3.weights(2), weights[2]);
+    EXPECT_EQ(dist3.weights(3), weights[3]);
 }
 
 TEST_F(discrete_dist_fixture, simple_Discrete_iter) {
