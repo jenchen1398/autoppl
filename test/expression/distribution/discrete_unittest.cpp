@@ -91,5 +91,10 @@ TEST_F(discrete_dist_fixture, Discrete_sampling_iter) {
         EXPECT_TRUE(sample == 0 || sample == 1 || sample == 2 || sample == 3);
     }
 }
+
+TEST_F(discrete_dist_fixture, Discrete_max_min) {
+    EXPECT_DOUBLE_EQ(dist1.min(), 0.1);
+    EXPECT_DOUBLE_EQ(dist1.max(), 0.4);
+}
 } // namespace expr
 } // namespace ppl

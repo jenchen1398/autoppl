@@ -52,24 +52,26 @@ struct Discrete : util::DistExpr<Discrete<weight_type>>
     }
 
     inline weight_value_t weights(value_t i) const { return static_cast<weight_value_t>(weights_[i]); }
-    value_t min() const { return 0; }
-    value_t max() const { return weights_.size() - 1;}
+    weight_value_t min() const { 
+        return weights(0); //static_cast<weight_value_t>(weights_.front()); 
+    }
+    weight_value_t max() const { 
+        return weights(weights_.size() - 1); //static_cast<weight_value_t>(weights_.back());
+    }
+
     
    private:
     std::vector<weight_type> weights_;
     template <class Iter> 
     void normalize_weights(Iter begin, Iter end){
-        // check that weights are positive, not empty, and normalize the weights
+        // check that weights are positive, not empty, sort and normalize the weights
         assert(std::distance(begin, end) > 0); 
         assert(std::all_of(begin, end, [](const weight_type& w_var){ return w_var.get_value() > 0; }));
         
-        // {0.0};
-        // for (Iter it = begin; it != end; it++) {
-        //     total += (*it).get_value();
-        // }
-        weight_value_t total =
-        std::accumulate(begin, end, 0.0, 
-        [] (int tmp_total, weight_type weight) { return tmp_total + weight.get_value(); });
+        auto comp_weights = [](weight_type& w1, weight_type& w2){ return w1.get_value() < w2.get_value(); };
+        std::sort(begin, end, comp_weights);
+        weight_value_t total = std::accumulate(begin, end, 0.0, 
+            [] (int tmp_total, weight_type weight) { return tmp_total + weight.get_value(); });
         std::for_each(begin, end, [total](weight_type& w_var){w_var.set_value(w_var.get_value() / total); }); 
     }
 };
