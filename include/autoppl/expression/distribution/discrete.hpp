@@ -53,10 +53,10 @@ struct Discrete : util::DistExpr<Discrete<weight_type>>
 
     inline weight_value_t weights(value_t i) const { return static_cast<weight_value_t>(weights_[i]); }
     weight_value_t min() const { 
-        return weights(0); //static_cast<weight_value_t>(weights_.front()); 
+        return static_cast<weight_value_t>(weights_.front()); 
     }
     weight_value_t max() const { 
-        return weights(weights_.size() - 1); //static_cast<weight_value_t>(weights_.back());
+        return static_cast<weight_value_t>(weights_.back());
     }
 
     
