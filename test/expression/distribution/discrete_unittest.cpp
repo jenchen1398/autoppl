@@ -13,9 +13,10 @@ struct discrete_dist_fixture : ::testing::Test {
 protected:
     using value_t = typename MockVarExpr::value_t;
 
-    std::vector<MockVarExpr> weights {MockVarExpr{0.1}, MockVarExpr{0.2}, MockVarExpr{0.3}, MockVarExpr{0.4}}; 
+    std::vector<MockVarExpr> weights_norm {MockVarExpr{0.1}, MockVarExpr{0.2}, MockVarExpr{0.3}, MockVarExpr{0.4}}; 
+    std::vector<MockVarExpr> weights {MockVarExpr{1}, MockVarExpr{2}, MockVarExpr{3}, MockVarExpr{4}}; 
    
-    Discrete<MockVarExpr> dist1 =  {MockVarExpr{0.1}, MockVarExpr{0.2}, MockVarExpr{0.3}, MockVarExpr{0.4}}; 
+    Discrete<MockVarExpr> dist1 =  {MockVarExpr{1}, MockVarExpr{2}, MockVarExpr{3}, MockVarExpr{4}}; 
     Discrete<MockVarExpr> dist2;
     Discrete<MockVarExpr> dist3 = Discrete(weights.begin(), weights.end());
 };
@@ -25,15 +26,15 @@ TEST_F(discrete_dist_fixture, ctor){
 }
 
 TEST_F(discrete_dist_fixture, discrete_check_params) {
-    EXPECT_DOUBLE_EQ(dist1.weights(0), static_cast<value_t>(weights[0]));
-    EXPECT_DOUBLE_EQ(dist1.weights(1), static_cast<value_t>(weights[1]));
-    EXPECT_DOUBLE_EQ(dist1.weights(2), static_cast<value_t>(weights[2]));
-    EXPECT_DOUBLE_EQ(dist1.weights(3), static_cast<value_t>(weights[3]));
+    EXPECT_DOUBLE_EQ(dist1.weights(0), static_cast<value_t>(weights_norm[0]));
+    EXPECT_DOUBLE_EQ(dist1.weights(1), static_cast<value_t>(weights_norm[1]));
+    EXPECT_DOUBLE_EQ(dist1.weights(2), static_cast<value_t>(weights_norm[2]));
+    EXPECT_DOUBLE_EQ(dist1.weights(3), static_cast<value_t>(weights_norm[3]));
 
-    EXPECT_DOUBLE_EQ(dist3.weights(0), static_cast<value_t>(weights[0]));
-    EXPECT_DOUBLE_EQ(dist3.weights(1), static_cast<value_t>(weights[1]));
-    EXPECT_DOUBLE_EQ(dist3.weights(2), static_cast<value_t>(weights[2]));
-    EXPECT_DOUBLE_EQ(dist3.weights(3), static_cast<value_t>(weights[3]));
+    EXPECT_DOUBLE_EQ(dist3.weights(0), static_cast<value_t>(weights_norm[0]));
+    EXPECT_DOUBLE_EQ(dist3.weights(1), static_cast<value_t>(weights_norm[1]));
+    EXPECT_DOUBLE_EQ(dist3.weights(2), static_cast<value_t>(weights_norm[2]));
+    EXPECT_DOUBLE_EQ(dist3.weights(3), static_cast<value_t>(weights_norm[3]));
 }
 
 TEST_F(discrete_dist_fixture, default_cstor_test){
@@ -42,10 +43,10 @@ TEST_F(discrete_dist_fixture, default_cstor_test){
 }
 
 TEST_F(discrete_dist_fixture, sanity_Discrete_test) {
-    EXPECT_EQ(dist1.weights(0), weights[0]);
-    EXPECT_EQ(dist1.weights(1), weights[1]);
-    EXPECT_EQ(dist1.weights(2), weights[2]);
-    EXPECT_EQ(dist1.weights(3), weights[3]);
+    EXPECT_EQ(dist1.weights(0), weights_norm[0].get_value());
+    EXPECT_EQ(dist1.weights(1), weights_norm[1].get_value());
+    EXPECT_EQ(dist1.weights(2), weights_norm[2].get_value()); 
+    EXPECT_EQ(dist1.weights(3), weights_norm[3].get_value());
 }
 
 TEST_F(discrete_dist_fixture, simple_Discrete) {
@@ -67,10 +68,10 @@ TEST_F(discrete_dist_fixture, Discrete_sampling) {
 }
 
 TEST_F(discrete_dist_fixture, sanity_Discrete_iter_test) {
-    EXPECT_EQ(dist3.weights(0), weights[0]);
-    EXPECT_EQ(dist3.weights(1), weights[1]);
-    EXPECT_EQ(dist3.weights(2), weights[2]);
-    EXPECT_EQ(dist3.weights(3), weights[3]);
+    EXPECT_EQ(dist3.weights(0), weights_norm[0].get_value());
+    EXPECT_EQ(dist3.weights(1), weights_norm[1].get_value());
+    EXPECT_EQ(dist3.weights(2), weights_norm[2].get_value());
+    EXPECT_EQ(dist3.weights(3), weights_norm[3].get_value());
 }
 
 TEST_F(discrete_dist_fixture, simple_Discrete_iter) {

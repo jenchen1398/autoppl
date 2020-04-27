@@ -92,7 +92,7 @@ inline void mh_posterior__(ModelType& model,
                     std::discrete_distribution disc_sampler({alpha, 1-2*alpha, alpha});
                     auto cand = disc_sampler(gen) - 1 + curr; // new candidate in curr + [-1, 0, 1]
                     // TODO: refactor common logic
-                    if (dist.min() <= cand && cand <= dist.max()) { // if within dist bound
+                    if (static_cast<int>(dist.min()) <= cand && cand <= static_cast<int>(dist.max())) { // if within dist bound
                         var.set_value(cand); 
                         ++n_swaps;
                     }
