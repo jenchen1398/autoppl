@@ -93,8 +93,8 @@ TEST_F(discrete_dist_fixture, Discrete_sampling_iter) {
 }
 
 TEST_F(discrete_dist_fixture, Discrete_max_min) {
-    EXPECT_DOUBLE_EQ(dist1.min(), 0.1);
-    EXPECT_DOUBLE_EQ(dist1.max(), 0.4);
+    EXPECT_EQ(dist1.min(), 0);
+    EXPECT_EQ(dist1.max(), weights_norm.size() - 1);
 }
 } // namespace expr
 } // namespace ppl

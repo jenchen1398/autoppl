@@ -52,10 +52,10 @@ struct Discrete : util::DistExpr<Discrete<weight_type>>
 
     inline weight_value_t weights(value_t i) const { return static_cast<weight_value_t>(weights_[i]); }
     weight_value_t min() const { 
-        return static_cast<weight_value_t>(weights_.front()); 
+        return 0; 
     }
     weight_value_t max() const { 
-        return static_cast<weight_value_t>(weights_.back());
+        return weights_.size() - 1;
     }
 
     
@@ -66,9 +66,6 @@ struct Discrete : util::DistExpr<Discrete<weight_type>>
         // check that weights are positive, not empty, sort and normalize the weights
         assert(std::distance(begin, end) > 0); 
         assert(std::all_of(begin, end, [](const weight_type& w_var){ return w_var.get_value() > 0; }));
-        
-        auto comp_weights = [](weight_type& w1, weight_type& w2){ return w1.get_value() < w2.get_value(); };
-        std::sort(begin, end, comp_weights);
         weight_value_t total = std::accumulate(begin, end, 0.0, 
             [] (int tmp_total, weight_type weight) { return tmp_total + weight.get_value(); });
         std::for_each(begin, end, [total](weight_type& w_var){w_var.set_value(w_var.get_value() / total); }); 
