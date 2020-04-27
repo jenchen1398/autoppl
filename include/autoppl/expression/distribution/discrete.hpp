@@ -9,8 +9,7 @@
 
 namespace ppl {
 namespace expr {
-
-// TODO: will most likely not be used as an expression
+    
 template <typename weight_type>
 struct Discrete : util::DistExpr<Discrete<weight_type>>
 {
