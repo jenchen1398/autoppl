@@ -43,10 +43,10 @@ TEST_F(discrete_dist_fixture, default_cstor_test){
 }
 
 TEST_F(discrete_dist_fixture, sanity_Discrete_test) {
-    EXPECT_EQ(dist1.weights(0), weights_norm[0].get_value());
-    EXPECT_EQ(dist1.weights(1), weights_norm[1].get_value());
-    EXPECT_EQ(dist1.weights(2), weights_norm[2].get_value()); 
-    EXPECT_EQ(dist1.weights(3), weights_norm[3].get_value());
+    EXPECT_DOUBLE_EQ(dist1.weights(0), weights_norm[0].get_value());
+    EXPECT_DOUBLE_EQ(dist1.weights(1), weights_norm[1].get_value());
+    EXPECT_DOUBLE_EQ(dist1.weights(2), weights_norm[2].get_value()); 
+    EXPECT_DOUBLE_EQ(dist1.weights(3), weights_norm[3].get_value());
 }
 
 TEST_F(discrete_dist_fixture, simple_Discrete) {
@@ -68,10 +68,10 @@ TEST_F(discrete_dist_fixture, Discrete_sampling) {
 }
 
 TEST_F(discrete_dist_fixture, sanity_Discrete_iter_test) {
-    EXPECT_EQ(dist3.weights(0), weights_norm[0].get_value());
-    EXPECT_EQ(dist3.weights(1), weights_norm[1].get_value());
-    EXPECT_EQ(dist3.weights(2), weights_norm[2].get_value());
-    EXPECT_EQ(dist3.weights(3), weights_norm[3].get_value());
+    EXPECT_DOUBLE_EQ(dist3.weights(0), weights_norm[0].get_value());
+    EXPECT_DOUBLE_EQ(dist3.weights(1), weights_norm[1].get_value());
+    EXPECT_DOUBLE_EQ(dist3.weights(2), weights_norm[2].get_value());
+    EXPECT_DOUBLE_EQ(dist3.weights(3), weights_norm[3].get_value());
 }
 
 TEST_F(discrete_dist_fixture, simple_Discrete_iter) {
